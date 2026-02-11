@@ -15,6 +15,7 @@ const RegisterScreen = () => {
         error,
         response
     } = useRegister()
+    console.log(error)
     return (
         <div>
             <h1>
@@ -23,50 +24,50 @@ const RegisterScreen = () => {
             <form onSubmit={onSubmitForm}>
                 <div>
                     <label htmlFor="username">Nombre de usuario:</label>
-                    <input 
-                    type="text" 
-                    id="username" 
-                    name='username' 
-                    value={form_state.username} 
-                    onChange={onChangeFieldValue}
+                    <input
+                        type="text"
+                        id="username"
+                        name='username'
+                        value={form_state.username}
+                        onChange={onChangeFieldValue}
                     />
                 </div>
                 <div>
                     <label htmlFor="password">Contrasena:</label>
-                    <input 
-                    type="password" 
-                    id='password' 
-                    name='password' 
-                    value={form_state.password} 
-                    onChange={onChangeFieldValue} 
+                    <input
+                        type="password"
+                        id='password'
+                        name='password'
+                        value={form_state.password}
+                        onChange={onChangeFieldValue}
                     />
                 </div>
                 <div>
                     <label htmlFor="email">Email:</label>
-                    <input 
-                    type="email" 
-                    id='email' 
-                    name='email' 
-                    value={form_state.email} 
-                    onChange={onChangeFieldValue}
+                    <input
+                        type="email"
+                        id='email'
+                        name='email'
+                        value={form_state.email}
+                        onChange={onChangeFieldValue}
                     />
                 </div>
                 {
-                    error && <span style={{color:'red'}}>{error.message}</span>
+                    error && <span style={{ color: 'red' }}>{error.message}</span>
                 }
                 {
-                    response 
-                    && 
-                    response.ok 
+                    response
                     &&
-                    <span style={{color:'green'}}>
+                    response.ok
+                    &&
+                    <span style={{ color: 'green' }}>
                         Usuario registrado exitosamente, te enviaremos un mail con instrucciones
                     </span>
                 }
                 <br />
                 <button type='submit' disabled={loading}>Registrarse</button>
                 <span>
-                    Ya tienes una cuenta? <Link to = '/login'> Iniciar sesion</Link>
+                    Ya tienes una cuenta? <Link to='/login'> Iniciar sesion</Link>
                 </span>
             </form>
         </div>
