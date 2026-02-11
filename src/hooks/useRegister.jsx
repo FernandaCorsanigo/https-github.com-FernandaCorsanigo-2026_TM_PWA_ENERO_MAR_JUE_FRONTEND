@@ -1,16 +1,16 @@
 import useForm from "./useForm"
 import useRequest from "./useRequest"
 
-function useRegister (){
-    const {loading, error, response, sendRequest} = useRequest()
+function useRegister() {
+    const { loading, error, response, sendRequest } = useRequest()
 
     const form_initial_state = {
         username: '',
         password: '',
         email: ''
     }
-    async function enviarRegistro (form_state) {
-        sendRequest (
+    async function enviarRegistro(form_state) {
+        await sendRequest(
             () => {
                 return register(form_state.username, form_state.password, form_state.email)
             }
@@ -27,7 +27,7 @@ function useRegister (){
         form_state,
         onChangeFieldValue,
         onSubmitForm
-    } = useForm (
+    } = useForm(
         {
             initial_form_fields: form_initial_state,
             onSubmit: enviarRegistro
