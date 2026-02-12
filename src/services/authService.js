@@ -113,52 +113,22 @@ Validate token → manda solo token (GET, headers)
     return response
 } */
 
-export function verifyEmail() {
-    const [searchParams] = useSearchParams();
-    const token = searchParams.get("token");
-    const [message, setMessage] = useState("Verificando tu cuenta...");
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        const verifyEmail = async () => {
-            if (!token) {
-                setMessage("Token de verificación ausente.");
-                return;
+export async function verifyEmail(token) {
+    const response_http = await fetch(
+        import.meta.env.VITE_API_URL + `/api/auth/verify-email?verification_email_token=${token}`,
+        {
+            method: 'GET',
+            headers: {
+                'x-api-key': import.meta.env.VITE_API_KEY
             }
-
-            try {
-                const response_http = await fetch(
-                    import.meta.env.VITE_API_URL + `/api/auth/verify-email?verification_email_token=${token}`,
-                    {
-                        method: 'GET',
-                        headers: {
-                            'x-api-key': import.meta.env.VITE_API_KEY
-                        }
-                    }
-                );
-
-                const response = await response_http.json();
-
-                if (!response.ok) {
-                    throw new ServerError(response.message, response.status);
-                }
-
-                setMessage("✅ Tu email fue verificado correctamente.");
-                // Opcional: redirigir al login después de 3s
-                setTimeout(() => navigate("/login"), 3000);
-
-            } catch (error) {
-                console.error(error);
-                setMessage(error.message || "Error verificando tu usuario.");
-            }
-        };
-
-        verifyEmail();
-    }, [token, navigate]);
-
-    return (
-        <div >
-            <h2>{message}</h2>
-        </div>
+        }
     );
+
+    const response = await response_http.json();
+
+    if (!response.ok) {
+        throw new ServerError(response.message, response.status);
+    }
+
+    return response;
 }
