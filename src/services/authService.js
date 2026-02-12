@@ -3,6 +3,7 @@
 - API EXTERNA
 - Libreria que necesite una configuracion */
 
+import { useNavigate, useSearchParams } from "react-router"
 import { ServerError } from "../utils/errorUtils"
 
 /* Fetch es una funcion que nos permite hacer peticiones http a un servidor. (Basicamente nos permite traer datos de otro lugar)
@@ -89,13 +90,13 @@ Response body example:(esto es copia de cuando en postman por ejemplo se crea un
 }
 */
 
-export async function validateAuth_token() {
-    /*IDEA CLAVE:
+//export async function validateAuth_token() {
+/*IDEA CLAVE:
 Login → manda email + password (POST, body)
 Validate token → manda solo token (GET, headers) 
 */
 
-    const response_http = await fetch(
+/*     const response_http = await fetch(
         URL_API + '/api/auth/validate-token',
         {
             method: 'GET',
@@ -105,9 +106,59 @@ Validate token → manda solo token (GET, headers)
             }
         }
     )
-    const response = await response_http.json() // Funcion asincronica por eso el await
-    if (!response.ok) {
+    const response = await response_http.json()  */// Funcion asincronica por eso el await
+/*     if (!response.ok) {
         throw new ServerError(response.message, response.status)
     }
     return response
+} */
+
+export function verifyEmail() {
+    const [searchParams] = useSearchParams();
+    const token = searchParams.get("token");
+    const [message, setMessage] = useState("Verificando tu cuenta...");
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const verifyEmail = async () => {
+            if (!token) {
+                setMessage("Token de verificación ausente.");
+                return;
+            }
+
+            try {
+                const response_http = await fetch(
+                    import.meta.env.VITE_API_URL + `/api/auth/verify-email?verification_email_token=${token}`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            'x-api-key': import.meta.env.VITE_API_KEY
+                        }
+                    }
+                );
+
+                const response = await response_http.json();
+
+                if (!response.ok) {
+                    throw new ServerError(response.message, response.status);
+                }
+
+                setMessage("✅ Tu email fue verificado correctamente.");
+                // Opcional: redirigir al login después de 3s
+                setTimeout(() => navigate("/login"), 3000);
+
+            } catch (error) {
+                console.error(error);
+                setMessage(error.message || "Error verificando tu usuario.");
+            }
+        };
+
+        verifyEmail();
+    }, [token, navigate]);
+
+    return (
+        <div >
+            <h2>{message}</h2>
+        </div>
+    );
 }
