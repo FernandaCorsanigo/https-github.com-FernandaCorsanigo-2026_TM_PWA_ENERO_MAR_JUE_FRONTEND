@@ -27,7 +27,6 @@ export async function login(email, password) {
         {
             method: 'POST',
             headers: {
-                'x-api-key': import.meta.env.VITE_API_KEY,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(
@@ -56,7 +55,6 @@ export async function register(username, password, email) { // funcion asincroni
         {
             method: 'POST',
             headers: {
-                'x-api-key': import.meta.env.VITE_API_KEY,
                 'Content-Type': 'application/json' //Configuramos que vamos a enviar json en la peticion, para que el middleware sepa detectar que es un json y sepa hacer las transformaciones correspondientes
             },
             body: JSON.stringify( // El objeto que vamos a eviar y tiene que tener el mismo formato que postman.
