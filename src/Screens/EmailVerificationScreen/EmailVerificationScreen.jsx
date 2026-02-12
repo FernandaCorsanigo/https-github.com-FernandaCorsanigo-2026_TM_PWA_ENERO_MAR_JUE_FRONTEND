@@ -1,4 +1,5 @@
-import { useSearchParams } from "react-router-dom";
+
+import { useSearchParams } from "react-router";
 import { useVerifyEmail } from "../../hooks/useVerifyEmail";
 
 export default function EmailVerificationScreen() {
